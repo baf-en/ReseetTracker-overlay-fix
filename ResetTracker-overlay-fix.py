@@ -31,7 +31,7 @@ class MyHandler(FileSystemEventHandler):
     def time_format(self, number):
         minutes = int(number // 60)
         seconds = round((number - (minutes * 60)), 1)
-        return f"{minutes:02}:{seconds:02}"
+        return f"{minutes:02}:{seconds:04}"
 
 if __name__ == "__main__":
     for afile in fix_paths:
