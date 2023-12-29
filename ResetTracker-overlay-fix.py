@@ -1,13 +1,13 @@
 import os, time
 from watchdog.events import FileSystemEventHandler
-from watchdog.observers import Observer
+from watchdog.observers.polling import PollingObserver
 
 file_paths = ['obs/EnterAvg.txt', 'obs/NPH.txt']
 fix_paths = ['obs/EnterAvg_fix.txt', 'obs/NPH_fix.txt']
 
 class MyHandler(FileSystemEventHandler):
     def on_modified(self, event):
-        # print(f"File {event.src_path} has been modified")
+        print(f"File {event.src_path} has been modified")
         if os.path.basename(event.src_path) == os.path.basename(file_paths[0]):
             # print("enterAvg")
             with open(event.src_path, mode='r') as f1:
@@ -25,7 +25,7 @@ class MyHandler(FileSystemEventHandler):
                 # print(self.data)
                 self.fixed_nph = round(self.data, 2)
                 # print(self.fixed_nph)
-                with open(fix_paths[0], 'w+') as f2:
+                with open(fix_paths[1], 'w+') as f2:
                     f2.write(str(self.fixed_nph))
                 
     def time_format(self, number):
@@ -38,7 +38,7 @@ if __name__ == "__main__":
         txtFile = open(afile, mode='w+')
         if afile == fix_paths[0]:
             txtFile.write(str("00:00.0"))
-        else:
+        elif afile == fix_paths[1]:
             txtFile.write(str("0.00"))
         txtFile.close()
 
@@ -46,11 +46,12 @@ if __name__ == "__main__":
         f.write(str("0"))
 
     event_handler = MyHandler()
-    observer = Observer()
+    observer = PollingObserver()
 
     print("starting")
 
-    observer.schedule(event_handler, path='obs', recursive=False)
+    for afile in file_paths:
+        observer.schedule(event_handler, path=afile, recursive=False)
 
     observer.start()
 
