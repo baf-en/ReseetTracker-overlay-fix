@@ -36,3 +36,5 @@ obs/NPH_fix.txt
 obs/EnterCount.txt
 obs/EnterAvg.txt
 obs/EnterAvg_fix.txt
+etc/execute.bat
+etc/install_package.bat
